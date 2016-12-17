@@ -1,0 +1,62 @@
+package ru.endlesscode.crypto.blowfish;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Created by OsipXD on 17.12.2016
+ * It is part of the Blowfish.
+ * All rights reserved 2014 - 2016 © «EndlessCode Group»
+ */
+@SuppressWarnings("Duplicates")
+public class BlowfishUtilsTest {
+    @Test
+    public void bytesToInt() throws Exception {
+        byte[] bytes = {0x00, 0x01, 0x02, 0x03};
+        Assert.assertEquals(0x00010203, BlowfishUtils.bytesToInt(bytes));
+
+        bytes = new byte[]{(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff};
+        Assert.assertEquals(0xffffffff, BlowfishUtils.bytesToInt(bytes));
+
+        bytes = new byte[]{0x00, 0x00, 0x00, 0x00};
+        Assert.assertEquals(0x00000000, BlowfishUtils.bytesToInt(bytes));
+    }
+
+    @Test
+    public void intToBytes() {
+        Assert.assertArrayEquals(new byte[]{0x00, 0x00, 0x00, 0x00}, BlowfishUtils.intToBytes(0));
+
+        Assert.assertArrayEquals(new byte[]{(byte) 0xff, (byte) 0xff, (byte) 0xff, (byte) 0xff}, BlowfishUtils.intToBytes(0xffffffff));
+
+        Assert.assertArrayEquals(new byte[]{0x01, 0x02, 0x03, 0x04}, BlowfishUtils.intToBytes(0x01020304));
+    }
+
+    @Test
+    public void addPadding() {
+        byte[] arr = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07};
+        Assert.assertArrayEquals(new byte[]{
+                0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+                (byte) 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, BlowfishUtils.addPadding(arr));
+
+        arr = new byte[]{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06};
+        Assert.assertArrayEquals(new byte[]{
+                0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, (byte) 0xff}, BlowfishUtils.addPadding(arr));
+
+        arr = new byte[]{0x00, 0x01, 0x02, 0x03, 0x04, 0x05};
+        Assert.assertArrayEquals(new byte[]{
+                0x00, 0x01, 0x02, 0x03, 0x04, 0x05, (byte) 0xff, 0x00}, BlowfishUtils.addPadding(arr));
+    }
+
+    @Test
+    public void removePadding() {
+        byte[] arr = {0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+                (byte) 0xff, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        Assert.assertArrayEquals(new byte[]{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07}, BlowfishUtils.removePadding(arr));
+
+        arr = new byte[]{ 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, (byte) 0xff};
+        Assert.assertArrayEquals(new byte[]{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06}, BlowfishUtils.removePadding(arr));
+
+        arr = new byte[]{0x00, 0x01, 0x02, 0x03, 0x04, 0x05, (byte) 0xff, 0x00};
+        Assert.assertArrayEquals(new byte[]{0x00, 0x01, 0x02, 0x03, 0x04, 0x05}, BlowfishUtils.removePadding(arr));
+    }
+}
