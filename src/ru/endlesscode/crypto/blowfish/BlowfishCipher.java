@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by OsipXD on 16.12.2016
- * It is part of the Blowfish.
+ * It is part of the Crypto.
  * All rights reserved 2014 - 2016 © «EndlessCode Group»
  */
 @SuppressWarnings("WeakerAccess")

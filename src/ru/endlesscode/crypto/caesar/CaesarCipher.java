@@ -1,11 +1,10 @@
 package ru.endlesscode.crypto.caesar;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by OsipXD on 17.12.2016
- * It is part of the Blowfish.
+ * It is part of the Crypto.
  * All rights reserved 2014 - 2016 © «EndlessCode Group»
  */
 @SuppressWarnings("WeakerAccess")
@@ -18,18 +17,11 @@ public class CaesarCipher {
 
     public String encrypt(String data, Alphabet alphabet) {
         char[] encrypted = data.toCharArray();
-        char[] alphabetChars = alphabet.getChars();
-
         for (int i = 0; i < encrypted.length; i++) {
-            boolean isLowercase = Character.isLowerCase(encrypted[i]);
-            int charPos = alphabet.getCharPosition(encrypted[i]);
+            char sym = alphabet.getCharWithOffset(encrypted[i], key);
 
-            if (charPos != -1) {
-                encrypted[i] = alphabetChars[(charPos + key) % alphabet.getStrength()];
-
-                if (isLowercase) {
-                    encrypted[i] = Character.toLowerCase(encrypted[i]);
-                }
+            if (sym != 0) {
+                encrypted[i] = sym;
             }
         }
 
@@ -38,18 +30,11 @@ public class CaesarCipher {
 
     public String decrypt(String encrypted, Alphabet alphabet) {
         char[] decrypted = encrypted.toCharArray();
-        char[] alphabetChars = alphabet.getChars();
-
         for (int i = 0; i < decrypted.length; i++) {
-            boolean isLowercase = Character.isLowerCase(decrypted[i]);
-            int charPos = alphabet.getCharPosition(decrypted[i]);
+            char sym = alphabet.getCharWithOffset(decrypted[i], - key + alphabet.getStrength());
 
-            if (charPos != -1) {
-                decrypted[i] = alphabetChars[(charPos - key + alphabet.getStrength()) % alphabet.getStrength()];
-
-                if (isLowercase) {
-                    decrypted[i] = Character.toLowerCase(decrypted[i]);
-                }
+            if (sym != 0) {
+                decrypted[i] = sym;
             }
         }
 
@@ -65,19 +50,24 @@ public class CaesarCipher {
             this.symbols = symbols;
         }
 
-        @NotNull
-        public char[] getChars() {
-            return symbols.toCharArray();
-        }
-
         @Contract(pure = true)
         public int getStrength() {
             return symbols.length();
         }
 
-        @Contract(pure = true)
-        public int getCharPosition(char sym) {
-            return symbols.indexOf(Character.toUpperCase(sym));
+        public char getCharWithOffset(char sym, int offset) {
+            boolean isLowercase = Character.isLowerCase(sym);
+            int charPos = symbols.indexOf(Character.toUpperCase(sym));
+            if (charPos == -1) {
+                return 0;
+            }
+
+            sym = symbols.charAt((charPos + offset) % getStrength());
+            if (isLowercase) {
+                sym = Character.toLowerCase(sym);
+            }
+
+            return sym;
         }
     }
 }

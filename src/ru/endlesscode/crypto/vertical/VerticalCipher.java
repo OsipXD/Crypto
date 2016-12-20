@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by OsipXD on 17.12.2016
- * It is part of the Blowfish.
+ * It is part of the Crypto.
  * All rights reserved 2014 - 2016 © «EndlessCode Group»
  */
 @SuppressWarnings("WeakerAccess")
@@ -19,9 +19,9 @@ public class VerticalCipher {
             throw new IllegalArgumentException("Key must contains " + TABLE_SIZE + " bytes");
         }
 
-        //{5, 3, 2, 4, 1} -> {4, 2, 1, 5, 3}
         byte[] privateKey = {4, 3, 5, 1, 2};
         this.key = encrypt(key, privateKey);
+        //{5, 3, 2, 4, 1} -> {4, 2, 1, 5, 3}
     }
 
     public String encrypt(String message) {

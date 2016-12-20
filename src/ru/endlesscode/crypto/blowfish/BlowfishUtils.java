@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 /**
  * Created by OsipXD on 17.12.2016
- * It is part of the Blowfish.
+ * It is part of the Crypto.
  * All rights reserved 2014 - 2016 © «EndlessCode Group»
  */
 class BlowfishUtils {
